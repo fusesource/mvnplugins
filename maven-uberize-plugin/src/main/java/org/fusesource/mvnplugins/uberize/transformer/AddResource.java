@@ -40,7 +40,10 @@ public class AddResource implements Transformer {
 
     public void process(Uberizer uberizer, File workDir, TreeMap<String, UberEntry> uberEntries) throws IOException {
         if( file!=null && file.exists() && path!=null ) {
-            final UberEntry uberEntry = uberEntries.get(path);
+            UberEntry uberEntry = uberEntries.get(path);
+            if (uberEntry == null) {
+            	uberEntry = new UberEntry(path);
+            }
             UberEntry modEntry = new UberEntry(path, uberEntry);
             modEntry.getSources().add(file);
             modEntry.getSources().addAll(uberEntry.getSources());
