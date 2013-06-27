@@ -166,6 +166,23 @@ public class ProjectMojo extends AbstractMojo {
      * @parameter default-value="false" expression="${hide-group-id}"
      */
     protected boolean hideGroupId;
+    
+    /**
+     * A comma separated list of group Ids to include. If this parameter
+     * is specified, any group Id not matching will  be excluded.
+     * A '*' can be appended <b>only</b> at the end to match subgroups<br/>
+     * For example: <code>com.apache,java.net.*</code>
+     * @parameter expression="${include-group-ids}"
+     */
+    protected String includeGroupIds;
+    
+    /**
+     * A comma separated list of group Ids to exclude. A '*' can be appended
+     * <b>only</b> at the end to match subgroups<br/>
+     * For example: <code>com.apache,java.net.*</code>
+     * @parameter expression="${exclude-group-ids}"
+     */
+    protected String excludeGroupIds;
 
     /**
      * If set to true then the module type label will not be drawn.
@@ -229,8 +246,20 @@ public class ProjectMojo extends AbstractMojo {
 
             if (hideScopes != null) {
                 for (String scope : hideScopes.split(",")) {
-                    visualizer.hideScopes.add(scope);
+                    visualizer.hideScopes.add(scope.trim());
                 }
+            }
+            
+            if (excludeGroupIds != null) {
+               for (String groupId : excludeGroupIds.split(",")) {
+                  visualizer.excludeGroupIds.add(groupId.trim());
+               }
+            }
+            
+            if (includeGroupIds != null) {
+               for (String groupId : includeGroupIds.split(",")) {
+                  visualizer.includeGroupIds.add(groupId.trim());
+               }
             }
 
             ArrayList<MavenProject> projects = new ArrayList<MavenProject>();

@@ -48,6 +48,10 @@ public class DependencyVisualizer {
     Log log;
     boolean cascade;
     String direction="TB";
+    
+    HashSet<String> excludeGroupIds = new HashSet<String>();
+    HashSet<String> includeGroupIds = new HashSet<String>();
+    
 
     private class Node {
         private final String id;
@@ -212,6 +216,7 @@ public class DependencyVisualizer {
         private String scope;
         private boolean optional;
         private DependencyNode dependencyNode;
+        private String groupId;
 
         public Edge(Node parent, Node child, DependencyNode dependencyNode) {
             this.parent = parent;
@@ -219,6 +224,7 @@ public class DependencyVisualizer {
             this.dependencyNode = dependencyNode;
             this.scope = dependencyNode.getArtifact().getScope();
             this.optional = dependencyNode.getArtifact().isOptional();
+            this.groupId = dependencyNode.getArtifact().getGroupId();
         }
         public Edge(Edge edge) {
             this.parent = edge.parent;
@@ -254,6 +260,39 @@ public class DependencyVisualizer {
                 return true;
             if(hideScopes.contains(scope) )
                 return true;
+            
+            for (String exclude : excludeGroupIds) {
+               if (exclude.endsWith("*")) {
+                  //wildcard match
+                  String prefix = exclude.substring(0, exclude.length()-2); //remove ".*"
+                  if (groupId.startsWith(prefix)) {
+                     return true;
+                  }
+               } else {
+                  //exact match
+                  if (groupId.equals(exclude)) {
+                     return true;
+                  }
+               }
+            }
+            
+            for (String include : includeGroupIds) {
+               if (include.endsWith("*")) {
+                  //wildcard match
+                  String prefix = include.substring(0, include.length()-2); //remove ".*"
+                  if (groupId.startsWith(prefix)) {
+                     return false;
+                  }
+               } else {
+                  //exact match
+                  if (groupId.equals(include)) {
+                     return false;
+                  }
+               }
+               return true; //if there is an include, exclude everything not included
+            }
+            
+            
             
             final int state = dependencyNode.getState();
             if(hideOmitted && (state==DependencyNode.OMITTED_FOR_CONFLICT || state==DependencyNode.OMITTED_FOR_CYCLE) ) {
@@ -354,7 +393,7 @@ public class DependencyVisualizer {
         }
         if (dn.hasChildren()) {
             for (DependencyNode c : (List<DependencyNode>) dn.getChildren()) {
-                Node child = add(c, false);
+               Node child = add(c, false);
                 Edge edge = new Edge(parent, child, c);
                 add(edge);
             }
