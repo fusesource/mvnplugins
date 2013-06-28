@@ -49,8 +49,8 @@ public class DependencyVisualizer {
     boolean cascade;
     String direction="TB";
     
-    HashSet<String> excludeGroupIds = new HashSet<String>();
-    HashSet<String> includeGroupIds = new HashSet<String>();
+    Set<String> excludeGroupIds = new HashSet<String>();
+    Set<String> includeGroupIds = new HashSet<String>();
     
 
     private class Node {
