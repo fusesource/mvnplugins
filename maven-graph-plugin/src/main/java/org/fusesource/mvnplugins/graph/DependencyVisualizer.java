@@ -217,6 +217,7 @@ public class DependencyVisualizer {
         private boolean optional;
         private DependencyNode dependencyNode;
         private String groupId;
+        private String artifactId;
 
         public Edge(Node parent, Node child, DependencyNode dependencyNode) {
             this.parent = parent;
@@ -225,6 +226,7 @@ public class DependencyVisualizer {
             this.scope = dependencyNode.getArtifact().getScope();
             this.optional = dependencyNode.getArtifact().isOptional();
             this.groupId = dependencyNode.getArtifact().getGroupId();
+            this.artifactId = dependencyNode.getArtifact().getArtifactId();
         }
         public Edge(Edge edge) {
             this.parent = edge.parent;
@@ -266,11 +268,13 @@ public class DependencyVisualizer {
                   //wildcard match
                   String prefix = exclude.substring(0, exclude.length()-2); //remove ".*"
                   if (groupId.startsWith(prefix)) {
+                     log.debug("Excluding (wildcard) " + groupId + ":" + artifactId);
                      return true;
                   }
                } else {
                   //exact match
                   if (groupId.equals(exclude)) {
+                     log.debug("Excluding " + groupId + ":" + artifactId);
                      return true;
                   }
                }
@@ -281,11 +285,13 @@ public class DependencyVisualizer {
                   //wildcard match
                   String prefix = include.substring(0, include.length()-2); //remove ".*"
                   if (groupId.startsWith(prefix)) {
+                     log.debug("Including (wildcard) " + groupId + ":" + artifactId);
                      return false;
                   }
                } else {
                   //exact match
                   if (groupId.equals(include)) {
+                     log.debug("Including " + groupId + ":" + artifactId);
                      return false;
                   }
                }
