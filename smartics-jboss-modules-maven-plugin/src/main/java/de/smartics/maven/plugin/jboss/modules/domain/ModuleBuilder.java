@@ -136,7 +136,7 @@ public final class ModuleBuilder
     return slot;
   }
 
-//  private static String calcSlot(final SlotStrategy strategy,
+//  private static String calculateSlot(final SlotStrategy strategy,
 //      final String defaultSlot, final String moduleSlot, final Artifact artifact)
 //  {
 //    final String slot;
@@ -144,7 +144,7 @@ public final class ModuleBuilder
 //    {
 //      if (artifact != null)
 //      {
-//        slot = strategy.calcSlot(artifact, defaultSlot);
+//        slot = strategy.calculateSlot(artifact, defaultSlot);
 //      }
 //      else
 //      {

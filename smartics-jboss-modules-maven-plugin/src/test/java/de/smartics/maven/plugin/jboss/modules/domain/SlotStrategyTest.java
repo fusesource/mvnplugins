@@ -12,16 +12,18 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests {@link de.smartics.maven.plugin.jboss.modules.domain.SlotStrategy}.
+ * Tests {@link de.smartics.maven.plugin.jboss.modules.domain.SlotStrategy} with the default MAIN slot strategy.
  */
 @RunWith(Parameterized.class)
 public class SlotStrategyTest {
 
-    private Artifact artifact = new DefaultArtifact("com.yourcompany", "awesome-artifact", "jar", "1.2.3");
-
-    private SlotStrategy slotStrategy;
+    // A simple artifact to use in the tests
+    private Artifact artifact;
 
     private String expectedVersion;
+
+    // The class under test
+    private SlotStrategy slotStrategy;
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -29,13 +31,24 @@ public class SlotStrategyTest {
                 {"1.2.3", SlotStrategy.MAIN, "main"},
                 {"1.2.3", SlotStrategy.VERSION_MAJOR, "1"},
                 {"4.5", SlotStrategy.VERSION_MAJOR, "4"},
-                {"4.5", SlotStrategy.VERSION_MAJOR, "4"},
+                {"4.5", SlotStrategy.VERSION_MAJOR_MINOR, "4.5"},
+                {"4.5.3", SlotStrategy.VERSION_MAJOR_MINOR, "4.5"},
+                {"4", SlotStrategy.VERSION_MAJOR_MINOR, "4.0"},
                 {"4.5", SlotStrategy.VERSION_FULL, "4.5.0"},
                 {"4.5", SlotStrategy.MAIN, "main"}
         });
     }
 
-    public SlotStrategyTest(String artifactVersion, SlotStrategy slotStrategy, String expectedVersion) {
+    /**
+     * For each test create an artifact and use {@link de.smartics.maven.plugin.jboss.modules.domain.SlotStrategy}
+     * to calculate the version and test it against the expected version.
+     *
+     * @param artifactVersion the version of the {@link org.eclipse.aether.artifact.Artifact} to create.
+     * @param slotStrategy the {@link de.smartics.maven.plugin.jboss.modules.domain.SlotStrategy} to test.
+     * @param expectedVersion the expected version.
+     */
+    public SlotStrategyTest(final String artifactVersion, final SlotStrategy slotStrategy,
+                            final String expectedVersion) {
         this.slotStrategy = slotStrategy;
         this.expectedVersion = expectedVersion;
 
@@ -43,9 +56,15 @@ public class SlotStrategyTest {
     }
 
     @Test
-    public void testVersionForSlotStrategy() {
+    public void testVersionForMainDefaultSlotStrategy() {
         assertEquals("strategy version incorrect", expectedVersion,
-                slotStrategy.calcSlot(artifact, SlotStrategy.MAIN_SLOT));
+                slotStrategy.calculateSlot(artifact, SlotStrategy.MAIN_SLOT));
+    }
+
+    @Test
+    public void testVersionForMainDefaultSlotStrategyfromStrategy() {
+        assertEquals("strategy version incorrect", expectedVersion,
+                SlotStrategy.fromString(slotStrategy.toString()).calculateSlot(artifact, SlotStrategy.MAIN_SLOT));
     }
 
 }
