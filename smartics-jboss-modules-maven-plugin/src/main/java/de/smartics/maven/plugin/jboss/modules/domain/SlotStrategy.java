@@ -38,7 +38,7 @@ public enum SlotStrategy
    */
   MAIN("main") {
     @Override
-    String calculateSlot(Artifact artifact, String defaultSlot) {
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
       return StringUtils.isBlank(defaultSlot) ? MAIN_SLOT : defaultSlot;
     }
   },
@@ -48,10 +48,9 @@ public enum SlotStrategy
    */
   VERSION_MAJOR_MINOR("version-major-minor") {
     @Override
-    String calculateSlot(Artifact artifact, String defaultSlot) {
-      final ArtifactVersion version = calcVersion(artifact);
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
       final String slot = String.format("%s.%s", String.valueOf(version.getMajorVersion()),
-                                                 String.valueOf(version.getMinorVersion()));
+          String.valueOf(version.getMinorVersion()));
       return applySlotStrategy(defaultSlot, slot);
     }
   },
@@ -61,8 +60,7 @@ public enum SlotStrategy
    */
   VERSION_MAJOR("version-major") {
     @Override
-    String calculateSlot(Artifact artifact, String defaultSlot) {
-      final ArtifactVersion version = calcVersion(artifact);
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
       return applySlotStrategy(defaultSlot, String.valueOf(version.getMajorVersion()));
     }
   },
@@ -72,8 +70,7 @@ public enum SlotStrategy
    */
   VERSION_FULL("version-full") {
     @Override
-    String calculateSlot(Artifact artifact, String defaultSlot) {
-      final ArtifactVersion version = calcVersion(artifact);
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
       String slot = String.format("%s.%s.%s", String.valueOf(version.getMajorVersion()),
                                               String.valueOf(version.getMinorVersion()),
                                               String.valueOf(version.getIncrementalVersion()));
@@ -143,12 +140,11 @@ public enum SlotStrategy
   /**
    * Calculates the name for the slot, each type of SlotStrategy has a different implementation.
    *
-   * @param artifact the artifact with additional information. If
-   *          <code>null</code>: a static prefix will be assumed.
+   * @param version the {@link org.apache.maven.artifact.versioning.ArtifactVersion}.
    * @param defaultSlot the name of the default slot to use.
    * @return the name of the slot.
    */
-  abstract String calculateSlot(final Artifact artifact, final String defaultSlot);
+  abstract String calculateSlot(final ArtifactVersion version, final String defaultSlot);
 
   /**
    * Apply the slot strategy to the slot given.
@@ -179,7 +175,7 @@ public enum SlotStrategy
       final Artifact artifact)
   {
     final String fallBackSlot = StringUtils.isBlank(moduleSlot) ? defaultSlot : moduleSlot;
-    return calculateSlot(artifact, fallBackSlot);
+    return calculateSlot(calculateVersion(artifact), fallBackSlot);
   }
 
   /**
@@ -190,7 +186,7 @@ public enum SlotStrategy
    * @return the {@link org.apache.maven.artifact.versioning.ArtifactVersion} created from
    *         the version or if the version is null it is set to VersionX.
    */
-  ArtifactVersion calcVersion(final Artifact artifact)
+  ArtifactVersion calculateVersion(final Artifact artifact)
   {
       return new DefaultArtifactVersion(artifact == null ? "VersionX" : artifact.getVersion());
   }
