@@ -1,7 +1,5 @@
 package de.smartics.maven.plugin.jboss.modules.domain;
 
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,15 +15,7 @@ import static org.junit.Assert.assertNotEquals;
  * ie. non MAIN slot strategy.
  */
 @RunWith(Parameterized.class)
-public class SlotStrategyNonDefaultTest {
-
-  // A simple artifact to use in the tests
-  private Artifact artifact;
-
-  private String expectedVersion;
-
-  // The class under test
-  private SlotStrategy slotStrategy;
+public class SlotStrategyNonDefaultTest extends AbstractSlotStrategyTest {
 
   // The default slot strategy, normally main
   private String defaultNonMainSlotStrategy;
@@ -53,24 +43,21 @@ public class SlotStrategyNonDefaultTest {
    */
   public SlotStrategyNonDefaultTest(final String artifactVersion, final SlotStrategy slotStrategy,
                                     final String defaultNonMainSlotStrategy, final String expectedVersion) {
-    this.slotStrategy = slotStrategy;
-    this.expectedVersion = expectedVersion;
+    super(artifactVersion, slotStrategy, expectedVersion);
     this.defaultNonMainSlotStrategy = defaultNonMainSlotStrategy;
-
-    this.artifact = new DefaultArtifact("com.yourcompany", "awesome-artifact", "jar", artifactVersion);
   }
 
   @Test
-  public void testVersionForNonMainDefaultSlotStrategy() {
+  public void testVersionForMainDefaultSlotStrategy() {
     assertNotEquals("default non main slot strategy incorrect", SlotStrategy.MAIN_SLOT, defaultNonMainSlotStrategy);
-    assertEquals("strategy version incorrect", expectedVersion,
-        slotStrategy.calculateSlot(artifact, defaultNonMainSlotStrategy));
+    assertEquals("strategy version for non default slot incorrect", expectedVersion,
+        slotStrategy.calculateSlot(version, defaultNonMainSlotStrategy));
   }
 
   @Test
-  public void testVersionForNonMainDefaultSlotStrategyfromStrategy() {
-    assertEquals("strategy version incorrect", expectedVersion,
-        SlotStrategy.fromString(slotStrategy.toString()).calculateSlot(artifact, defaultNonMainSlotStrategy));
+  public void testVersionForMainDefaultSlotStrategyFromString() {
+    assertEquals("strategy version for non default slot incorrect", expectedVersion,
+        SlotStrategy.fromString(slotStrategy.toString()).calculateSlot(version, defaultNonMainSlotStrategy));
   }
 
 }

@@ -1,7 +1,5 @@
 package de.smartics.maven.plugin.jboss.modules.domain;
 
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -15,16 +13,8 @@ import static org.junit.Assert.assertEquals;
  * Tests {@link de.smartics.maven.plugin.jboss.modules.domain.SlotStrategy} with the default MAIN slot strategy.
  */
 @RunWith(Parameterized.class)
-public class SlotStrategyTest {
-
-    // A simple artifact to use in the tests
-    private Artifact artifact;
-
-    private String expectedVersion;
-
-    // The class under test
-    private SlotStrategy slotStrategy;
-
+public class SlotStrategyTest extends AbstractSlotStrategyTest {
+  
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
@@ -49,22 +39,19 @@ public class SlotStrategyTest {
      */
     public SlotStrategyTest(final String artifactVersion, final SlotStrategy slotStrategy,
                             final String expectedVersion) {
-        this.slotStrategy = slotStrategy;
-        this.expectedVersion = expectedVersion;
-
-        this.artifact = new DefaultArtifact("com.yourcompany", "awesome-artifact", "jar", artifactVersion);
+      super(artifactVersion, slotStrategy, expectedVersion);
     }
 
     @Test
     public void testVersionForMainDefaultSlotStrategy() {
         assertEquals("strategy version incorrect", expectedVersion,
-                slotStrategy.calculateSlot(artifact, SlotStrategy.MAIN_SLOT));
+                slotStrategy.calculateSlot(version, SlotStrategy.MAIN_SLOT));
     }
 
     @Test
-    public void testVersionForMainDefaultSlotStrategyfromStrategy() {
+    public void testVersionForMainDefaultSlotStrategyFromString() {
         assertEquals("strategy version incorrect", expectedVersion,
-                SlotStrategy.fromString(slotStrategy.toString()).calculateSlot(artifact, SlotStrategy.MAIN_SLOT));
+                SlotStrategy.fromString(slotStrategy.toString()).calculateSlot(version, SlotStrategy.MAIN_SLOT));
     }
 
 }
