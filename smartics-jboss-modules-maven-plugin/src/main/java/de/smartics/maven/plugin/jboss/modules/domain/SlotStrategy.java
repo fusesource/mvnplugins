@@ -151,10 +151,11 @@ public enum SlotStrategy
   public abstract String calculateSlot(final Artifact artifact, final String defaultSlot);
 
   /**
+   * Apply the slot strategy to the slot given.
    *
-   * @param defaultSlot
-   * @param slot
-   * @return
+   * @param defaultSlot  the default slot touse
+   * @param slot the slot to apply the strategy to
+   * @return the slot with the strategy applied.
    */
   private static String applySlotStrategy(final String defaultSlot, String slot)
   {
