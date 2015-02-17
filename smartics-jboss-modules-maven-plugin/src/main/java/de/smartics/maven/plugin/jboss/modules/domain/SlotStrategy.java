@@ -38,7 +38,7 @@ public enum SlotStrategy
    */
   MAIN("main") {
     @Override
-    public String calculateSlot(Artifact artifact, String defaultSlot) {
+    String calculateSlot(Artifact artifact, String defaultSlot) {
       return StringUtils.isBlank(defaultSlot) ? MAIN_SLOT : defaultSlot;
     }
   },
@@ -48,7 +48,7 @@ public enum SlotStrategy
    */
   VERSION_MAJOR_MINOR("version-major-minor") {
     @Override
-    public String calculateSlot(Artifact artifact, String defaultSlot) {
+    String calculateSlot(Artifact artifact, String defaultSlot) {
       final ArtifactVersion version = calcVersion(artifact);
       final String slot = String.format("%s.%s", String.valueOf(version.getMajorVersion()),
                                                  String.valueOf(version.getMinorVersion()));
@@ -61,7 +61,7 @@ public enum SlotStrategy
    */
   VERSION_MAJOR("version-major") {
     @Override
-    public String calculateSlot(Artifact artifact, String defaultSlot) {
+    String calculateSlot(Artifact artifact, String defaultSlot) {
       final ArtifactVersion version = calcVersion(artifact);
       return applySlotStrategy(defaultSlot, String.valueOf(version.getMajorVersion()));
     }
@@ -72,7 +72,7 @@ public enum SlotStrategy
    */
   VERSION_FULL("version-full") {
     @Override
-    public String calculateSlot(Artifact artifact, String defaultSlot) {
+    String calculateSlot(Artifact artifact, String defaultSlot) {
       final ArtifactVersion version = calcVersion(artifact);
       String slot = String.format("%s.%s.%s", String.valueOf(version.getMajorVersion()),
                                               String.valueOf(version.getMinorVersion()),
@@ -148,7 +148,7 @@ public enum SlotStrategy
    * @param defaultSlot the name of the default slot to use.
    * @return the name of the slot.
    */
-  public abstract String calculateSlot(final Artifact artifact, final String defaultSlot);
+  abstract String calculateSlot(final Artifact artifact, final String defaultSlot);
 
   /**
    * Apply the slot strategy to the slot given.

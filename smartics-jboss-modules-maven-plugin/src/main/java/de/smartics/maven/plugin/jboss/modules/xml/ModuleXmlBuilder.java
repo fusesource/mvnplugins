@@ -388,7 +388,7 @@ public final class ModuleXmlBuilder
     final Dependency dependency = element.dependency;
     final String defaultSlot = calcDefaultSlot(module, dependency);
     final String slot =
-        slotStrategy.calculateSlot(dependency.getArtifact(), defaultSlot);
+        slotStrategy.calcSlot(defaultSlot, StringUtils.EMPTY, dependency.getArtifact());
     if (!SlotStrategy.MAIN_SLOT.equals(slot))
     {
       moduleElement.setAttribute("slot", slot);
