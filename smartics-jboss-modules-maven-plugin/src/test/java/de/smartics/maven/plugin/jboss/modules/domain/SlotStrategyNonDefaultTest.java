@@ -37,7 +37,7 @@ public class SlotStrategyNonDefaultTest {
         {"4.5", SlotStrategy.VERSION_MAJOR, "non-default", "non-default4"},
         {"4.5", SlotStrategy.VERSION_MAJOR_MINOR, "anotherDefault", "anotherDefault4.5"},
         {"4.5.7", SlotStrategy.VERSION_MAJOR_MINOR, "anotherDefault", "anotherDefault4.5"},
-        {"4", SlotStrategy.VERSION_MAJOR_MINOR, "anotherDefault", "anotherDefault4.5"},
+        {"4", SlotStrategy.VERSION_MAJOR_MINOR, "anotherDefault", "anotherDefault4.0"},
         {"4.5", SlotStrategy.VERSION_FULL, "semi-osgi-slot", "semi-osgi-slot4.5.0"}
     });
   }
