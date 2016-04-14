@@ -66,6 +66,7 @@ public class DependencyVisualizer {
         private final ArrayList<Edge> parents = new ArrayList<Edge>();
         private final Artifact artifact;
         private int roots;
+        private int recursiveChildCount = -1;
 
         public Node(String id, Artifact artifact) {
             this.id = id;
@@ -202,6 +203,11 @@ public class DependencyVisualizer {
         }
 
         public int getRecursiveChildCount() {
+
+            if (recursiveChildCount >= 0) {
+                return recursiveChildCount;
+            }
+
             int rc = children.size();
             for (Edge child : children) {
                 int t = child.getRecursiveChildCount();
@@ -209,6 +215,7 @@ public class DependencyVisualizer {
                     rc = t;
                 }
             }
+            recursiveChildCount = rc;
             return rc;
         }
 
