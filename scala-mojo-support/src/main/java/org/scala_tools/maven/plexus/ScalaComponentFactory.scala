@@ -42,7 +42,7 @@ class ScalaComponentFactory extends AbstractComponentFactory {
 	       (for {        
 	        child <- componentDescriptor.getConfiguration.getChildren
 	        if child.getName.startsWith(constructorPrefix)
-	        val order = child.getName.substring(constructorPrefix.length)
+	        order = child.getName.substring(constructorPrefix.length)
 	      } yield (child, order)).toList.sortWith(_._2 < _._2).map(_._1).toArray
       } else {
         Array()

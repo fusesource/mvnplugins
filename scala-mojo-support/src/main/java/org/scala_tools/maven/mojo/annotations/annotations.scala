@@ -1,5 +1,6 @@
 package org.scala_tools.maven.mojo.annotations
 
+import scala.annotation.StaticAnnotation
 
 sealed abstract class MavenAnnotation extends StaticAnnotation
 
