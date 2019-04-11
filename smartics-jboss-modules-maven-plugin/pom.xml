@@ -417,7 +417,7 @@
         <repositories>
           <repository>
             <id>smartics</id>
-            <url>http://www.smartics.eu/nexus/content/groups/public-group</url>
+            <url>https://www.smartics.eu/nexus/content/groups/public-group</url>
             <releases>
               <enabled>true</enabled>
             </releases>
@@ -429,7 +429,7 @@
         <pluginRepositories>
           <pluginRepository>
             <id>smartics</id>
-            <url>http://www.smartics.eu/nexus/content/groups/public-group</url>
+            <url>https://www.smartics.eu/nexus/content/groups/public-group</url>
             <releases>
               <enabled>true</enabled>
             </releases>

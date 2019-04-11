@@ -365,14 +365,14 @@
         <repository>
           <id>fusesource-releases</id>
           <name>FuseSource Release Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/public</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/public</url>
           <releases><enabled>true</enabled></releases>
           <snapshots><enabled>false</enabled></snapshots>
         </repository>
         <repository>
           <id>fusesource-snapshots</id>
           <name>FuseSource Snapshot Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/public-snapshots</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/public-snapshots</url>
           <releases><enabled>false</enabled></releases>
           <snapshots><enabled>true</enabled></snapshots>
         </repository>
@@ -381,14 +381,14 @@
         <pluginRepository>
           <id>fusesource-releases</id>
           <name>FuseSource Release Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/public</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/public</url>
           <releases><enabled>true</enabled></releases>
           <snapshots><enabled>false</enabled></snapshots>
         </pluginRepository>
         <pluginRepository>
           <id>fusesource-snapshots</id>
           <name>FuseSource Snapshot Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/public-snapshots</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/public-snapshots</url>
           <releases><enabled>false</enabled></releases>
           <snapshots><enabled>true</enabled></snapshots>
         </pluginRepository>
@@ -402,14 +402,14 @@
         <repository>
           <id>fusesource-proxy</id>
           <name>FuseSource Proxy Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/m2-proxy</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/m2-proxy</url>
         </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
           <id>fusesource-proxy</id>
           <name>FuseSource Proxy Repository</name>
-          <url>http://repo.fusesource.com/nexus/content/groups/m2-proxy</url>
+          <url>https://repo.fusesource.com/nexus/content/groups/m2-proxy</url>
         </pluginRepository>
       </pluginRepositories>
     </profile>  

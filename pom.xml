@@ -102,7 +102,7 @@
     <site>
       <id>website.fusesource.org</id>
       <name>website</name>
-      <url>dav:http://fusesource.com/forge/dav/${forge-project-id}/maven/${project.version}</url>
+      <url>dav:https://fusesource.com/forge/dav/${forge-project-id}/maven/${project.version}</url>
     </site>
   </distributionManagement> 
 
@@ -270,13 +270,13 @@
 
         <repository>
           <id>fluido-skin</id>
-          <url>http://fluido-skin.googlecode.com/svn/repo/</url>
+          <url>https://fluido-skin.googlecode.com/svn/repo/</url>
         </repository>
         
         <repository>
           <id>scala-tools.org</id>
           <name>Scala-tools Maven2 Repository</name>
-          <url>http://scala-tools.org/repo-releases</url>
+          <url>https://scala-tools.org/repo-releases</url>
           <releases>
             <enabled>true</enabled>
           </releases>
@@ -291,7 +291,7 @@
         <pluginRepository>
           <id>scala</id>
           <name>Scala Tools</name>
-          <url>http://scala-tools.org/repo-releases</url>
+          <url>https://scala-tools.org/repo-releases</url>
           <releases>
             <enabled>true</enabled>
           </releases>
