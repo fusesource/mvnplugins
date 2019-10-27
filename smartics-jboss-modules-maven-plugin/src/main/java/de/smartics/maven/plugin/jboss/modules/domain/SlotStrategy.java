@@ -36,19 +36,48 @@ public enum SlotStrategy
   /**
    * The module is set to the main slot (default).
    */
-  MAIN("main"),
+  MAIN("main") {
+    @Override
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
+      return StringUtils.isBlank(defaultSlot) ? MAIN_SLOT : defaultSlot;
+    }
+  },
+
+  /**
+   * The module is set to the major minor artifact version slot
+   */
+  VERSION_MAJOR_MINOR("version-major-minor") {
+    @Override
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
+      final String slot = String.format("%s.%s", String.valueOf(version.getMajorVersion()),
+          String.valueOf(version.getMinorVersion()));
+      return applySlotStrategy(defaultSlot, slot);
+    }
+  },
 
   /**
    * The module is set to the major artifact version slot.
    */
-  VERSION_MAJOR("version-major"),
+  VERSION_MAJOR("version-major") {
+    @Override
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
+      return applySlotStrategy(defaultSlot, String.valueOf(version.getMajorVersion()));
+    }
+  },
 
   /**
    * The module is set to the full artifact version slot
    */
+  VERSION_FULL("version-full") {
+    @Override
+    String calculateSlot(final ArtifactVersion version, final String defaultSlot) {
+      String slot = String.format("%s.%s.%s", String.valueOf(version.getMajorVersion()),
+                                              String.valueOf(version.getMinorVersion()),
+                                              String.valueOf(version.getIncrementalVersion()));
+      return applySlotStrategy(defaultSlot, slot);
+    }
+  };
 
-  VERSION_FULL("version-full");
-  
   /**
    * The main slot.
    */
@@ -109,44 +138,28 @@ public enum SlotStrategy
   }
 
   /**
-   * Calculates the name for the slot.
+   * Calculates the name for the slot, each type of SlotStrategy has a different implementation.
    *
-   * @param artifact the artifact with additional information. If
-   *          <code>null</code>: a static prefix will be assumed.
+   * @param version the {@link org.apache.maven.artifact.versioning.ArtifactVersion}.
    * @param defaultSlot the name of the default slot to use.
    * @return the name of the slot.
    */
-  public String calcSlot(final Artifact artifact, final String defaultSlot)
-  {
-	final String versionString = calcVersion(artifact);
-	final ArtifactVersion version = new DefaultArtifactVersion(versionString);
-    if (this == VERSION_MAJOR)
-    {
-      final int majorVersion = version.getMajorVersion();
-      final String slot;
-      if (!(StringUtils.isBlank(defaultSlot) || MAIN_SLOT.equals(defaultSlot)))
-      {
-        slot = defaultSlot + majorVersion;
-      }
-      else
-      {
-        slot = String.valueOf(majorVersion);
-      }
-      return slot;
-    } else if (this == VERSION_FULL)
-    {
-      final int majorVersion = version.getMajorVersion();
-      final int minorVersion = version.getMinorVersion();
-      final int incrementalVersion = version.getIncrementalVersion();
-      String slot = String.valueOf(majorVersion) + "." + String.valueOf(minorVersion) + "." + String.valueOf(incrementalVersion);
-      if (!(StringUtils.isBlank(defaultSlot) || MAIN_SLOT.equals(defaultSlot)))
-      {
-        slot = defaultSlot + slot;
-      }
-      return slot;
-    }
+  abstract String calculateSlot(final ArtifactVersion version, final String defaultSlot);
 
-    return StringUtils.isBlank(defaultSlot) ? MAIN_SLOT : defaultSlot;
+  /**
+   * Apply the slot strategy to the slot given.
+   *
+   * @param defaultSlot  the default slot touse
+   * @param slot the slot to apply the strategy to
+   * @return the slot with the strategy applied.
+   */
+  private static String applySlotStrategy(final String defaultSlot, String slot)
+  {
+    if (!(StringUtils.isBlank(defaultSlot) || MAIN_SLOT.equals(defaultSlot)))
+    {
+      slot = defaultSlot.concat(slot);
+    }
+    return slot;
   }
 
   /**
@@ -161,21 +174,20 @@ public enum SlotStrategy
   public String calcSlot(final String defaultSlot, final String moduleSlot,
       final Artifact artifact)
   {
-    final String fallBackSlot =
-        StringUtils.isBlank(moduleSlot) ? defaultSlot : moduleSlot;
-    final String slot = calcSlot(artifact, fallBackSlot);
-    return slot;
+    final String fallBackSlot = StringUtils.isBlank(moduleSlot) ? defaultSlot : moduleSlot;
+    return calculateSlot(calculateVersion(artifact), fallBackSlot);
   }
 
-  private String calcVersion(final Artifact artifact)
+  /**
+   * Calculate the version for the given {@link org.eclipse.aether.artifact.Artifact}.
+   *  
+   * @param artifact the {@link org.eclipse.aether.artifact.Artifact} to find 
+   *                 the {@link org.apache.maven.artifact.versioning.ArtifactVersion} of.
+   * @return the {@link org.apache.maven.artifact.versioning.ArtifactVersion} created from
+   *         the version or if the version is null it is set to VersionX.
+   */
+  ArtifactVersion calculateVersion(final Artifact artifact)
   {
-    if (artifact != null)
-    {
-      return artifact.getVersion();
-    }
-    else
-    {
-      return "VersionX";
-    }
+      return new DefaultArtifactVersion(artifact == null ? "VersionX" : artifact.getVersion());
   }
 }
