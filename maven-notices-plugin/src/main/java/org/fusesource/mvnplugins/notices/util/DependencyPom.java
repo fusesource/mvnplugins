@@ -148,6 +148,7 @@ public class DependencyPom {
                 request.setDebug(true);
             }
             request.setOffline(session.getRequest().isOffline());
+            request.setProperties(session.getUserProperties());
 
             PrintStream invokerLog = null;
             InvocationResult invocationResult = null; 
